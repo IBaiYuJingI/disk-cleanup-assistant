@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Disk Cleanup Assistant</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <header>
+
+        <h1>Disk Cleanup Assistant</h1>
+
+        <p>
+            Analyze folders, identify large files,
+            and create cleanup plans.
+        </p>
+
+    </header>
+
+
+    <main>
+
+
+        <!-- ==================================================
+             Account
+        =================================================== -->
+
+        <section class="card">
+
+            <div id="loggedOutView">
+
+                <h2>Account</h2>
+
+                <p>
+                    Create an account or log in to save
+                    cleanup plans and view your cleanup history.
+                </p>
+
+
+                <div class="auth-grid">
+
+                    <div>
+
+                        <label for="emailInput">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="emailInput"
+                            placeholder="student@example.com"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="passwordInput">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="passwordInput"
+                            placeholder="Enter password"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="button-container">
+
+                    <button
+                        id="signUpButton"
+                        class="primary-button"
+                    >
+                        Sign Up
+                    </button>
+
+
+                    <button
+                        id="loginButton"
+                        class="safe-button"
+                    >
+                        Log In
+                    </button>
+
+                </div>
+
+
+                <p
+                    id="authMessage"
+                    class="message"
+                ></p>
+
+            </div>
+
+
+            <div
+                id="loggedInView"
+                class="hidden"
+            >
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>Account</h2>
+
+                        <p>
+                            Logged in as:
+                            <strong id="loggedInEmail"></strong>
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        id="logoutButton"
+                        class="secondary-button"
+                    >
+                        Log Out
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             Folder Selection
+        =================================================== -->
+
+        <section class="card">
+
+            <h2>Scan a Folder</h2>
+
+            <p>
+                Select a folder from your computer.
+                File information is analyzed locally.
+            </p>
+
+
+            <div class="button-container">
+
+                <button
+                    id="selectFolderButton"
+                    class="primary-button"
+                >
+                    Select Folder
+                </button>
+
+
+                <button
+                    id="stopScanButton"
+                    class="stop-button hidden"
+                >
+                    Stop Scan
+                </button>
+
+            </div>
+
+
+            <div
+                id="scanStatus"
+                class="scan-status hidden"
+            >
+
+                <div class="scan-title-row">
+
+                    <h3 id="scanTitle">
+                        Scanning...
+                    </h3>
+
+                    <div
+                        id="spinner"
+                        class="spinner"
+                    ></div>
+
+                </div>
+
+
+                <div class="progress-grid">
+
+                    <div class="progress-item">
+
+                        <span class="progress-label">
+                            Folders Scanned
+                        </span>
+
+                        <span
+                            id="scannedFolders"
+                            class="progress-value"
+                        >
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress-item">
+
+                        <span class="progress-label">
+                            Files Scanned
+                        </span>
+
+                        <span
+                            id="scannedFiles"
+                            class="progress-value"
+                        >
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress-item">
+
+                        <span class="progress-label">
+                            Size Found
+                        </span>
+
+                        <span
+                            id="scannedSize"
+                            class="progress-value"
+                        >
+                            0 B
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress-item">
+
+                        <span class="progress-label">
+                            Skipped Items
+                        </span>
+
+                        <span
+                            id="skippedItems"
+                            class="progress-value"
+                        >
+                            0
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="current-folder-box">
+
+                    <span class="progress-label">
+                        Current Folder
+                    </span>
+
+                    <span
+                        id="currentFolder"
+                        class="current-folder"
+                    >
+                        -
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <p class="privacy-message">
+                Files are not uploaded or deleted.
+                Only file metadata is analyzed locally.
+            </p>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             Scan Summary
+        =================================================== -->
+
+        <section
+            id="summarySection"
+            class="card hidden"
+        >
+
+            <h2>Scan Summary</h2>
+
+            <p id="scanResultMessage">
+                Scan completed.
+            </p>
+
+
+            <div class="summary-grid">
+
+                <div class="summary-item">
+
+                    <span class="summary-label">
+                        Folder
+                    </span>
+
+                    <span
+                        id="folderName"
+                        class="summary-value"
+                    >
+                        -
+                    </span>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <span class="summary-label">
+                        Files Scanned
+                    </span>
+
+                    <span
+                        id="fileCount"
+                        class="summary-value"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <span class="summary-label">
+                        Total Size
+                    </span>
+
+                    <span
+                        id="totalSize"
+                        class="summary-value"
+                    >
+                        0 B
+                    </span>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <span class="summary-label">
+                        Largest File
+                    </span>
+
+                    <span
+                        id="largestFile"
+                        class="summary-value"
+                    >
+                        -
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             Cleanup Selection
+        =================================================== -->
+
+        <section
+            id="cleanupSection"
+            class="card cleanup-card hidden"
+        >
+
+            <h2>Cleanup Selection</h2>
+
+            <p>
+                Select files that you may want to review
+                for cleanup.
+            </p>
+
+
+            <div class="cleanup-summary">
+
+                <div class="cleanup-summary-item">
+
+                    <span class="cleanup-label">
+                        Selected Files
+                    </span>
+
+                    <span
+                        id="cleanupSelectedCount"
+                        class="cleanup-value"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+
+                <div class="cleanup-summary-item">
+
+                    <span class="cleanup-label">
+                        Estimated Space to Free
+                    </span>
+
+                    <span
+                        id="cleanupSelectedSize"
+                        class="cleanup-value cleanup-space"
+                    >
+                        0 B
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="cleanup-buttons">
+
+                <button
+                    id="selectUserFilesButton"
+                    class="safe-button"
+                >
+                    Select All User Files
+                </button>
+
+
+                <button
+                    id="clearCleanupButton"
+                    class="secondary-button"
+                >
+                    Clear Selection
+                </button>
+
+            </div>
+
+
+            <p class="cleanup-warning">
+                User File does not mean safe to delete.
+                Always review files before removing them.
+            </p>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             Save Cleanup Plan
+        =================================================== -->
+
+        <section
+            id="savePlanSection"
+            class="card hidden"
+        >
+
+            <h2>Save Cleanup Plan</h2>
+
+            <p>
+                Save the current scan summary and cleanup
+                estimate to your account.
+            </p>
+
+
+            <label for="notesInput">
+                Notes
+            </label>
+
+            <textarea
+                id="notesInput"
+                rows="4"
+                placeholder="Example: Old installers and videos to review later."
+            ></textarea>
+
+
+            <div class="button-container">
+
+                <button
+                    id="savePlanButton"
+                    class="safe-button"
+                >
+                    Save Cleanup Plan
+                </button>
+
+            </div>
+
+
+            <p
+                id="savePlanMessage"
+                class="message"
+            ></p>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             File Type Summary
+        =================================================== -->
+
+        <section
+            id="typeSection"
+            class="card hidden"
+        >
+
+            <h2>File Type Summary</h2>
+
+            <p>
+                Storage usage grouped by file category.
+            </p>
+
+
+            <div
+                id="typeSummary"
+                class="type-summary"
+            ></div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             File Analysis
+        =================================================== -->
+
+        <section
+            id="fileSection"
+            class="card hidden"
+        >
+
+            <h2>Large File Analysis</h2>
+
+            <p>
+                By default, only files 100 MB or larger are shown.
+            </p>
+
+
+            <div class="filter-panel">
+
+                <div class="filter-item">
+
+                    <label for="minimumSizeFilter">
+                        Minimum File Size
+                    </label>
+
+                    <select id="minimumSizeFilter">
+
+                        <option
+                            value="104857600"
+                            selected
+                        >
+                            100 MB
+                        </option>
+
+                        <option value="52428800">
+                            50 MB
+                        </option>
+
+                        <option value="10485760">
+                            10 MB
+                        </option>
+
+                        <option value="1048576">
+                            1 MB
+                        </option>
+
+                        <option value="0">
+                            All Retained Files
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="filter-item">
+
+                    <label for="fileTypeFilter">
+                        File Type
+                    </label>
+
+                    <select id="fileTypeFilter">
+
+                        <option value="All">
+                            All Types
+                        </option>
+
+                        <option value="Video">
+                            Video
+                        </option>
+
+                        <option value="Image">
+                            Image
+                        </option>
+
+                        <option value="Archive">
+                            Archive
+                        </option>
+
+                        <option value="Program">
+                            Program
+                        </option>
+
+                        <option value="Document">
+                            Document
+                        </option>
+
+                        <option value="Audio">
+                            Audio
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="filter-item">
+
+                    <label for="safetyFilter">
+                        Safety
+                    </label>
+
+                    <select id="safetyFilter">
+
+                        <option value="All">
+                            All
+                        </option>
+
+                        <option value="User File">
+                            User File
+                        </option>
+
+                        <option value="Caution">
+                            Caution
+                        </option>
+
+                        <option value="System Risk">
+                            System Risk
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="filter-checkbox-item">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="showSmallerFiles"
+                        >
+
+                        Show Smaller Files
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <div class="safety-guide">
+
+                <div class="safety-guide-item">
+
+                    <span class="badge user-file-badge">
+                        User File
+                    </span>
+
+                    No common system risk detected.
+
+                </div>
+
+
+                <div class="safety-guide-item">
+
+                    <span class="badge caution-badge">
+                        Caution
+                    </span>
+
+                    Review carefully.
+
+                </div>
+
+
+                <div class="safety-guide-item">
+
+                    <span class="badge system-risk-badge">
+                        System Risk
+                    </span>
+
+                    May belong to Windows or software.
+
+                </div>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th class="checkbox-column">
+
+                                <input
+                                    type="checkbox"
+                                    id="selectAllVisibleCheckbox"
+                                >
+
+                            </th>
+
+                            <th>File</th>
+
+                            <th>Type</th>
+
+                            <th>Size</th>
+
+                            <th>Safety</th>
+
+                            <th>Modified</th>
+
+                            <th>Folder</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="fileTableBody">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <p
+                id="fileLimitMessage"
+                class="small-message"
+            ></p>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             Cleanup History
+        =================================================== -->
+
+        <section
+            id="historySection"
+            class="card hidden"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>Cleanup History</h2>
+
+                    <p>
+                        Cleanup plans saved to your account.
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="refreshHistoryButton"
+                    class="secondary-button"
+                >
+                    Refresh
+                </button>
+
+            </div>
+
+
+            <div id="historyList">
+
+                <p class="small-message">
+                    No cleanup plans yet.
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            Disk Cleanup Assistant
+        </p>
+
+    </footer>
+
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+    <script src="app.js"></script>
+
+
+</body>
+
+</html>
