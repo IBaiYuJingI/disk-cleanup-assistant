@@ -4,6 +4,12 @@ Disk Cleanup Assistant is a web application that helps users analyze folders, id
 
 The application was developed as part of Engineering Design 2.
 
+## Live Application
+
+Netlify deployment link:
+
+https://disk-cleanup-assistant.netlify.app/
+
 ## Features
 
 - Select and scan a local folder
