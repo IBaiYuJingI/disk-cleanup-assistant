@@ -10,6 +10,11 @@ Netlify deployment link:
 
 https://disk-cleanup-assistant.netlify.app/
 
+## Demo Video
+
+YouTube demo video:
+
+`https://youtu.be/qpy_2yoT9yw`
 ## Features
 
 - Select and scan a local folder
